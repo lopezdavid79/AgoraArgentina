@@ -1,11 +1,22 @@
+
+
 const mainController = {
     home: (req,res) => {
         // Renderiza la plantilla 'home.ejs' y pasa el título
-        res.render('home',{title:"Programa Ágora"})
+        res.render('home',{title:"Programa Ágora | Inicio"})
     },    
-    // contacto: (req,res) => {
-    //     res.render('contacto',{title:"Programa Ágora contacto"})
-    // }    
+    quienesSomos: (req,res) => {
+        // Nueva función para Quiénes Somos
+        res.render('quienes-somos',{title:"Programa Ágora | Quiénes Somos"})
+    },    
+    servicios: (req,res) => {
+        // Nueva función para Servicios
+        res.render('servicios',{title:"Programa Ágora | Servicios"})
+    },
+    contacto: (req,res) => {
+        // Descomentado y adaptado para la nueva estructura
+        res.render('contacto',{title:"Programa Ágora | Contacto"})
+    }    
 }
 
-module.exports = mainController;
+module.exports = mainController; 

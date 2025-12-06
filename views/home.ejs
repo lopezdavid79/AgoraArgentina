@@ -1,71 +1,63 @@
-<!DOCTYPE html> 
-<html lang="es"> 
-<head> 
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title><%= title %></title> 
-    <link rel="stylesheet" href="/css/styles.css"> 
-</head> 
-<body>
-    <div class="container">
-        <h1>Programa Ágora</h1>
-        <p class="image-ref">
+<%
+    // El título "Programa Ágora | Inicio" ya viene del controlador (mainController.js)
+%>
 
-[Image of hombre trabajando en una computadora]
-</p>
+<%- include('partials/header') %> 
+
+<main id="main-content" role="main" aria-labelledby="home-hero-title">
+    
+    <section class="hero-block">
+        <h1 id="home-hero-title" class="site-mission-title">Programa Ágora: Inclusión Laboral para Personas con Discapacidad Visual.</h1>
         
-        <h2>Objetivo Central</h2>
-        <p>El objetivo central del **Programa ÁGORA** es mejorar las oportunidades de **acceso al mercado laboral** de las personas ciegas y personas con baja visión. Creemos firmemente que el trabajo es una herramienta clave para la inclusión social y comunitaria.</p>
-
-        ---
-
-        <h2>Iniciativa y Trayectoria</h2>
-        <p>El **Programa ÁGORA** es una iniciativa de la **fundación ONCE para América Latina (FOAL)** que se implementa en nuestra región desde 2006. Desde 2025, trabaja en conjunto con la **Obra del Padre Mario**.</p>
-        <p>En la Argentina, miles de personas ciegas y con baja visión mejoraron sus habilidades para el trabajo y obtuvieron un puesto laboral, un paso definitivo hacia la inclusión real.</p>
+        <p class="mission-statement">
+            Mejorar las oportunidades de acceso al mercado laboral para personas ciegas o con baja visión.
+        </p>
         
-        ---
+        <a href="/postulacion" class="button cta-primary giant" aria-label="Botón principal para buscar trabajo. Redirige a postulación.">
+            ¿Estás buscando trabajo? 
+        </a>
+    </section>
 
-        <h2>Ejes de Trabajo del Programa</h2>
-        <p>Para lograr este objetivo, el Programa trabaja en:</p>
-        <ul>
-            <li>Promover que los servicios generales para la capacitación, formación, orientación, intermediación e inclusión laboral, tanto en su forma presencial como virtual, sean accesibles e inclusivos para todas las personas, incluidas las personas con discapacidad visual.</li>
-            <li>Realizar acciones específicas que permitan corregir la situación de desigualdad en que se encuentran las personas con discapacidad visual mediante la promoción de enseñanzas específicas en **competencias blandas**, **competencias digitales**, y manejo de **ayudas tiflotecnológicas**.</li>
-            <li>Construir una red de actores claves que vincule a instituciones formativas, empresas, organizaciones de la sociedad civil, cooperativas y organismos públicos de todos los poderes del estado, para ofrecer oportunidades reales de empleo.</li>
-        </ul>
+    <section class="section impact-figures">
+        <h2 class="section-heading visually-hidden">Nuestro Impacto</h2>
         
-        ---
-
-        <h2>¿Qué ofrecemos?</h2>
-        <ul>
-            <li>**Cursos, capacitaciones y talleres** que contribuyen a la formación profesional de las personas con discapacidad visual.</li>
-            <li>**Intermediación** entre usuarios y empresas que apuestan por inclusiones activas en el ámbito laboral.</li>
-            <li>**Ajustes en el entorno laboral** para cargos desempeñados por personas con discapacidad visual.</li>
-        </ul>
-
-        ---
+        <p class="stats-text">
+            Gracias al Programa Ágora, miles de personas con discapacidad visual han obtenido un puesto laboral.
+        </p>
         
-        <h2>Oportunidades</h2>
-        <div class="cta-buttons">
-            <h3>¿Estás buscando trabajo?</h3>
-            <a href="#">Hacé Click Aquí</a>
-            
-            <h3>¿Querés sumar talento y diversidad a tu empresa?</h3>
-            <a href="#">Hacé Click Aquí</a>
-            
-            <h3>¿Sos emprendedor y querés impulsar tu negocio?</h3>
-            <a href="#">Hacé Click Aquí</a>
+        <div class="statistics-grid">
+            <div class="stat-item">
+                <span class="stat-number">+10.000</span>
+                <p>Personas capacitadas</p>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">85%</span>
+                <p>Tasa de colocación</p>
+            </div>
         </div>
+    </section>
 
-        ---
-
-        <h2>Seguinos en nuestras redes sociales:</h2>
-        <div class="social-links">
-            <p><strong>Facebook:</strong> programaagoraargentina utm_sou…</p>
-            <p><strong>Instagram:</strong> @programaagoraargentina</p>
-            <p><strong>LinkedIn:</strong> profile id=61574984768416&mibe…</p>
-            <p><strong>Otros:</strong> programa-%C3%A1gora-argentina-…</p>
+    <section class="section secondary-cta">
+        <h2 class="section-heading">Formá Parte de Nuestra Red</h2>
+        <div class="cta-group">
+            <a href="/contacto?asunto=empresa" class="button cta-secondary">
+                ¿Querés sumar talento y diversidad a tu empresa?
+            </a>
+            <a href="/contacto?asunto=general" class="button cta-secondary">
+                ¿Sos emprendedor o querés colaborar?
+            </a>
         </div>
+    </section>
 
-    </div>
-</body>
-</html>
+    <section class="section news-summary">
+        <h2 class="section-heading">Últimas Noticias y Eventos</h2>
+        <p>Resumen de las últimas 3 noticias o próximos eventos (contenido dinámico).</p>
+        <div class="news-feed">
+            <article class="news-item">...</article>
+        </div>
+        <a href="/noticias" class="button cta-link" aria-label="Ver todas las noticias del programa Ágora">Ver más noticias</a>
+    </section>
+
+</main>
+
+<%- include('partials/footer') %>
