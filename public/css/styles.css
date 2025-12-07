@@ -60,3 +60,25 @@ ul {
     font-size: 0.9em; 
     color: #666; 
 }
+
+.skip-link {
+    position: absolute;
+    left: -999px; /* Mueve fuera de la pantalla */
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    z-index: 9999; /* Asegura que esté por encima de todo */
+}
+
+/* Hace visible el enlace y lo centra cuando recibe el foco (tecla Tab) */
+.skip-link:focus {
+    left: 50%; /* Posiciona a la mitad */
+    top: 10px;
+    width: auto;
+    height: auto;
+    transform: translateX(-50%); /* Centrado horizontal */
+    padding: 10px;
+    /* Los estilos de color, borde y fuente son manejados por las clases de Bootstrap (btn btn-secondary) */
+    text-decoration: none; /* Asegura que el texto no tenga el subrayado por defecto */
+}
