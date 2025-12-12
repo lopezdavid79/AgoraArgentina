@@ -1,84 +1,62 @@
-/* Estilos minimalistas para el contenido de Agora (extraídos de home.ejs y corregidos) */ 
+/* =======================================================
+   ESTILOS BASE: Modernos, Minimalistas y Accesibles (WCAG AA)
+   ======================================================= */
 
+/* 1. PALETA DE COLORES Y TIPOGRAFÍA */
+/* Definición de variables de color: Basado en el azul actual, pero más limpio y con un acento. */
+:root {
+    --color-primary: #1e3a8a;       /* Azul Principal de la ONG (Confianza) */
+    --color-primary-accent: #059669; /* Verde de Acento (Acción/CTA) - Alto Contraste */
+    --color-text-dark: #212529;     /* Gris Oscuro para Cuerpo de Texto (Mejor legibilidad que el negro puro) */
+    --color-light-background: #f8f9fa; /* Fondo muy claro y neutro */
+}
+
+/* Configuración de fuentes legibles (Se asume que estas fuentes están importadas en el head de header.ejs) */
 body { 
-    font-family: Arial, sans-serif; 
+    font-family: 'Open Sans', sans-serif; /* Alta legibilidad, buena opción para accesibilidad */
     line-height: 1.6; 
-    margin: 0; 
-    padding: 0; 
-    background-color: #f4f4f4; 
-    color: #333; 
+    color: var(--color-text-dark); 
+    background-color: #ffffff; /* Blanco puro para maximalismo minimalista */
 } 
-.container { 
-    max-width: 900px; 
-    margin: 40px auto; 
-    padding: 20px; 
-    background-color: white; 
-    border-radius: 8px; 
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-} 
-h1 { 
-    color: #1e457e; 
-    border-bottom: 2px solid #1e457e; 
-    padding-bottom: 10px; 
-    margin-bottom: 20px; 
-} 
-h2 { 
-    color: #2a64ad; 
-    margin-top: 30px; 
-} 
-ul { 
-    list-style-type: disc; 
-    margin-left: 25px; 
-    margin-bottom: 15px; 
-} 
-.cta-buttons { 
-    margin-top: 25px; 
-    text-align: center; 
-} 
-.cta-buttons a { 
-    display: block; 
-    width: 80%; 
-    max-width: 400px; 
-    margin: 10px auto; 
-    padding: 12px 25px; 
-    background-color: #5cb85c; 
-    color: white; 
-    text-decoration: none; 
-    border-radius: 5px; 
-    font-weight: bold; 
-    transition: background-color 0.3s; 
-} 
-.cta-buttons a:hover { 
-    background-color: #449d44; 
-} 
-.social-links a { 
-    color: #2a64ad; 
-    text-decoration: none; 
-} 
-.image-ref { 
-    font-style: italic; 
-    font-size: 0.9em; 
-    color: #666; 
+
+h1, h2, h3, h4, h5, h6 { 
+    font-family: 'Inter', sans-serif; /* Fuente moderna y geométrica para titulares */
+    font-weight: 700; /* Negrita para mayor impacto visual y accesibilidad */
+    color: var(--color-primary); 
 }
 
-.skip-link {
-    position: absolute;
-    left: -999px; /* Mueve fuera de la pantalla */
-    top: auto;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    z-index: 9999; /* Asegura que esté por encima de todo */
+/* 2. REGLAS DE ACCESIBILIDAD (FOCO) */
+/* Mejora del foco visible para usuarios de teclado (WCAG AA) */
+a:focus, button:focus, input:focus, .card:focus-within {
+    outline: 3px solid var(--color-primary-accent) !important; /* Contorno de alto contraste con color de acento */
+    outline-offset: 2px;
+    border-radius: 0.5rem; 
 }
 
-/* Hace visible el enlace y lo centra cuando recibe el foco (tecla Tab) */
-.skip-link:focus {
-    left: 50%; /* Posiciona a la mitad */
-    top: 10px;
-    width: auto;
-    height: auto;
-    transform: translateX(-50%); /* Centrado horizontal */
-    padding: 10px;
-    /* Los estilos de color, borde y fuente son manejados por las clases de Bootstrap (btn btn-secondary) */
-    text-decoration: none; /* Asegura que el texto no tenga el subrayado por defecto */
+/* Aplicación del color de acento a los botones de CTA principales */
+.btn-primary-accent {
+    background-color: var(--color-primary-accent) !important;
+    border-color: var(--color-primary-accent) !important;
+    color: #ffffff !important; /* Texto blanco en CTA para contraste (WCAG) */
+    font-weight: bold;
+    transition: background-color 0.3s;
 }
+
+.btn-primary-accent:hover {
+    background-color: #047857 !important; 
+    border-color: #047857 !important;
+}
+
+/* Estilos de las tarjetas/elementos de contenido (Minimalista: Sombra y Borde sutil) */
+.card-minimal {
+    border: none;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease-in-out;
+    border-radius: 0.75rem;
+}
+
+.card-minimal:hover {
+    transform: translateY(-5px); 
+}
+/* Mantenemos la regla skip-link existente, ya que está bien implementada */
+/* .skip-link:focus {} */
