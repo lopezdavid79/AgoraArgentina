@@ -13,6 +13,11 @@ const mainController = {
         // Nueva función para Servicios
         res.render('servicios',{title:"Programa Ágora | Servicios"})
     },
+    capacitaciones: (req,res) => {
+        // Nueva función para Ccapacitaciones
+        res.render('capacitaciones',{title:"Programa Ágora | Capacitaciones"})
+    },
+
     contacto: (req,res) => {
         // Descomentado y adaptado para la nueva estructura
         res.render('contacto',{title:"Programa Ágora | Contacto"})
