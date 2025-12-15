@@ -1,0 +1,34 @@
+[
+    {
+        "id": 1,
+        "fecha": "2024-12-10",
+        "titulo": "Ágora lanza el Taller de Empleabilidad 2025: Inscríbete ya",
+        "descripcionCorta": "Abrimos las inscripciones para la próxima edición de nuestro programa de mentoría intensiva para la búsqueda de empleo.",
+        "slug": "lanzamiento-taller-empleabilidad-2025",
+        "imagen": "/images/noticia-taller.jpg" 
+    },
+    {
+        "id": 2,
+        "fecha": "2024-11-20",
+        "titulo": "El impacto de la inteligencia artificial en la accesibilidad web",
+        "descripcionCorta": "Análisis de las últimas tendencias tecnológicas y cómo la IA está redefiniendo las herramientas de accesibilidad para personas con discapacidad visual.",
+        "slug": "impacto-ia-accesibilidad-web",
+        "imagen": "/images/noticia-ia.jpg"
+    },
+    {
+        "id": 3,
+        "fecha": "2024-10-05",
+        "titulo": "Testimonio: María alcanzó su primer empleo en el sector IT",
+        "descripcionCorta": "Conoce la historia de María, egresada de nuestro programa de capacitación NVDA, y su éxito en la integración a una empresa líder en tecnología.",
+        "slug": "testimonio-maria-empleo-it",
+        "imagen": "/images/noticia-maria.jpg"
+    },
+    {
+        "id": 4,
+        "fecha": "2024-09-01",
+        "titulo": "Convenio con ASAERCA para nuevas oportunidades laborales",
+        "descripcionCorta": "Firma de acuerdo de colaboración para generar 20 nuevas vacantes en empresas socias de la Cámara Argentina de Comercio.",
+        "slug": "convenio-asaerca-vacantes",
+        "imagen": "/images/noticia-convenio.jpg"
+    }
+]

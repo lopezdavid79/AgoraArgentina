@@ -16,35 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 app.use(methodOverride('_method'))
 
-// 3[
-    {
-        "id": 101,
-        "titulo": "NVDA Básico (Navegación y Uso Inicial)",
-        "descripcionCorta": "Curso esencial para la introducción al lector de pantalla NVDA. Aprende a navegar por el escritorio, aplicaciones básicas y el uso fundamental del teclado.",
-        "modalidad": "Online - Sincrónico",
-        "duracion": "4 Semanas",
-        "slug": "nvda-basico-uso-inicial",
-        "imagen": "/images/curso-nvda-inicial.jpg"
-    },
-    {
-        "id": 102,
-        "titulo": "Word y Excel con NVDA (Productividad)",
-        "descripcionCorta": "Domina Microsoft Word y Excel utilizando el lector NVDA. Céntrate en la creación de documentos accesibles, hojas de cálculo y atajos de productividad esenciales.",
-        "modalidad": "Online - Asincrónico",
-        "duracion": "6 Semanas",
-        "slug": "word-excel-con-nvda-productividad",
-        "imagen": "/images/curso-office.jpg"
-    },
-    {
-        "id": 103,
-        "titulo": "Herramientas de Google y NVDA (Colaboración)",
-        "descripcionCorta": "Aprovecha al máximo Google Docs, Sheets, Calendar y Gmail, garantizando una colaboración eficiente y totalmente accesible con el lector de pantalla NVDA.",
-        "modalidad": "Online - Sincrónico",
-        "duracion": "4 Semanas",
-        "slug": "apps-google-con-nvda-colaboracion",
-        "imagen": "/images/curso-google-apps.jpg"
-           }
-]. Montar el router para la ruta base (/)
+//Montar el router para la ruta base (/)
 app.use("/", routerMain); 
 
 // 4. Iniciar servidor

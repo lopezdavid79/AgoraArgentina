@@ -1,0 +1,50 @@
+<%- include('../partials/header') %> 
+
+<main id="main-content" role="main" aria-labelledby="noticia-detail-title" class="container py-5">
+    
+    <section class="row justify-content-center">
+        <div class="col-lg-10">
+            
+            <h1 id="noticia-detail-title" class="display-5 fw-bolder mb-3 text-primary">
+                <%= noticia.titulo %>
+            </h1>
+            
+            <p class="text-muted small mb-4 border-bottom pb-3">
+                Publicado el 
+                <time datetime="<%= noticia.fecha %>">
+                    <%= new Date(noticia.fecha).toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+                </time>
+                | Programa Ágora
+            </p>
+            
+            <% if (noticia.imagen) { %>
+                <img src="<%= noticia.imagen %>" class="img-fluid rounded-3 mb-5 shadow-sm" 
+                     alt="Imagen descriptiva para la noticia <%= noticia.titulo %>" 
+                     style="max-height: 450px; width: 100%; object-fit: cover;">
+            <% } %>
+
+            <div class="noticia-body lead fs-6 text-dark mb-5">
+                
+                <p><%= noticia.descripcionCorta %></p>
+                
+                <h2 class="h4 fw-bold mt-4 mb-3 text-secondary">Desarrollo Completo</h2>
+                
+                <p>
+                    [Aquí iría el contenido extenso del cuerpo de la noticia. Actualmente no está en el JSON, 
+                     pero asegúrate de añadir un campo como `contenidoCompleto` a tu JSON para inyectarlo aquí.]
+                </p>
+                
+                <p>
+                    Finalizamos este reporte de la noticia <%= noticia.titulo %>. ¡Gracias por mantenerte informado!
+                </p>
+            </div>
+            
+            <a href="/noticias" class="btn btn-outline-secondary rounded-pill px-4" role="button">
+                ← Volver al Archivo de Noticias
+            </a>
+        </div>
+    </section>
+
+</main>
+
+<%- include('../partials/footer') %>
