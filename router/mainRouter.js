@@ -1,34 +1,48 @@
 const router = require("express").Router();
+
+// Importación de Controladores
 const mainController = require("../controller/mainController");
+const newsController = require("../controller/newsController");
+
+// Importación de Middlewares
+const authMiddleware = require("../middleware/authMiddleware");
+const uploadNews = require("../middleware/multerNews");
 
 // =========================================================
-// RUTAS PRINCIPALES ESTÁTICAS
+// 1. RUTAS PÚBLICAS (Accesibles por cualquier visitante)
 // =========================================================
-// Ruta Raíz (Inicio)
 router.get('/', mainController.home);
-// Ruta Quienes Somos
 router.get('/quienes-somos', mainController.quienesSomos);
-// Ruta Servicios
 router.get('/servicios', mainController.servicios);
-// Ruta Contacto
 router.get('/contacto', mainController.contacto);
 
-
-// =========================================================
-// RUTAS DE CONTENIDO DINÁMICO (Capacitaciones y Noticias)
-// =========================================================
-
-// 1. Rutas de Capacitaciones
-// Lista de cursos completa
+// Capacitaciones
 router.get('/capacitaciones', mainController.capacitaciones); 
-// Detalle de un curso por su SLUG (Ej: /cursos/nvda-basico)
 router.get('/cursos/:slug', mainController.cursoDetail); 
 
-// 2. Rutas de Noticias (NUEVAS)
-// Lista de todas las noticias (Página completa de archivo)
+// Noticias (Vista pública)
 router.get('/noticias', mainController.noticias); 
-// Detalle de una noticia por su SLUG (Ej: /noticias/convenio-asaerca-vacantes)
 router.get('/noticias/:slug', mainController.noticiaDetail);
+
+
+// =========================================================
+// 2. RUTAS ADMINISTRATIVAS DE NOTICIAS (Requieren Login)
+// =========================================================
+
+// Listado administrativo (donde ves la tabla para editar o borrar)
+router.get('/admin/noticias', authMiddleware, newsController.adminList);
+
+// Crear noticia
+// Nota: 'image' debe coincidir con el name del input file en tu formulario EJS
+router.get('/noticias/create', authMiddleware, newsController.create);
+router.post('/noticias/create', authMiddleware, uploadNews.single('image'), newsController.store);
+
+// Editar noticia
+router.get('/noticias/edit/:id', authMiddleware, newsController.edit);
+router.put('/noticias/edit/:id', authMiddleware, uploadNews.single('image'), newsController.update);
+
+// Eliminar noticia
+router.delete('/noticias/delete/:id', authMiddleware, newsController.destroy);
 
 
 module.exports = router;
