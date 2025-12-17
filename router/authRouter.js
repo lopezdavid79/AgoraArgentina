@@ -1,34 +1,14 @@
-const router = require("express").Router();
-const mainController = require("../controller/mainController");
+const express = require('express');
+const router = express.Router();
+const authController = require('../controller/authController');
 
-// =========================================================
-// RUTAS PRINCIPALES ESTÁTICAS
-// =========================================================
-// Ruta Raíz (Inicio)
-router.get('/', mainController.home);
-// Ruta Quienes Somos
-router.get('/quienes-somos', mainController.quienesSomos);
-// Ruta Servicios
-router.get('/servicios', mainController.servicios);
-// Ruta Contacto
-router.get('/contacto', mainController.contacto);
+// Ruta para mostrar el formulario de login
+router.get('/login', authController.showLogin);
 
+// Ruta para procesar el formulario de login
+router.post('/login', authController.login);
 
-// =========================================================
-// RUTAS DE CONTENIDO DINÁMICO (Capacitaciones y Noticias)
-// =========================================================
-
-// 1. Rutas de Capacitaciones
-// Lista de cursos completa
-router.get('/capacitaciones', mainController.capacitaciones); 
-// Detalle de un curso por su SLUG (Ej: /cursos/nvda-basico)
-router.get('/cursos/:slug', mainController.cursoDetail); 
-
-// 2. Rutas de Noticias (NUEVAS)
-// Lista de todas las noticias (Página completa de archivo)
-router.get('/noticias', mainController.noticias); 
-// Detalle de una noticia por su SLUG (Ej: /noticias/convenio-asaerca-vacantes)
-router.get('/noticias/:slug', mainController.noticiaDetail);
-
+// Ruta para cerrar sesión
+router.get('/logout', authController.logout);
 
 module.exports = router;

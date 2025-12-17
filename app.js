@@ -1,39 +1,54 @@
 const express = require('express');
-const app = express();
-const path = require("path");
+const path = require('path');
+const methodOverride = require('method-override');
+const session = require('express-session'); // Requerir express-session
 
-const methodOverride =  require('method-override');
-const session = require('express-session'); 
-// Configuración de Sesiones
+// 1. IMPORTAR LOS ROUTERS
+const mainRouter = require('./router/mainRouter');
+const authRouter = require('./router/authRouter'); // Importar el router de autenticación
+
+const app = express();
+
+// --- CONFIGURACIÓN DEL MOTOR DE VISTAS ---
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// --- MIDDLEWARES GLOBALES ---
+app.use(express.static(path.join(__dirname, 'public'))); // Carpeta pública
+app.use(express.urlencoded({ extended: false }));       // Capturar datos de formularios
+app.use(express.json());                                // Capturar datos JSON
+app.use(methodOverride('_method'));                     // Soporte para PUT y DELETE
+
+// 2. CONFIGURACIÓN DE SESIONES (¡Debe ir antes de las rutas!)
 app.use(session({
-    secret: 'CLAVE_SECRETA_LARGA_PARA_AGORA', // ¡Cambia esto por algo único y largo!
-    resave: false, // No forzar que la sesión se guarde en cada request
-    saveUninitialized: false, // No crear sesiones para usuarios que no han iniciado sesión
+    secret: "AgoraArgentinaSecret2025", // Clave para firmar la cookie
+    resave: false,                      // No guarda la sesión si no hay cambios
+    saveUninitialized: false,           // No crea sesiones para usuarios no logueados
     cookie: { 
-        secure: 'auto', // Auto: usa HTTPS si es necesario (mejor para producción)
-        maxAge: 1000 * 60 * 60 * 24 // Cookie dura 24 horas
+        secure: false,                  // Cambiar a true solo si usas HTTPS
+        maxAge: 1000 * 60 * 60 * 24     // La sesión dura 24 horas
     }
 }));
 
-// 1. Cargar el enrutador principal
-const routerMain = require("./router/mainRouter"); 
+// --- MIDDLEWARE PARA PASAR DATOS DE SESIÓN A LAS VISTAS (Opcional pero útil) ---
+// Esto permite saber si el usuario está logueado en cualquier archivo .ejs (ej: para mostrar el botón Logout)
+app.use((req, res, next) => {
+    res.locals.isLoggedIn = req.session.isLoggedIn || false;
+    res.locals.user = req.session.user || null;
+    next();
+});
 
-// 2. Configuración de middlewares y motor de vistas
-app.use(express.static(path.join(__dirname, 'public')));
-//Configuran EJS como motor de vistas.
-app.set('view engine','ejs');
-app.set('views', path.join(__dirname, 'views'));
-app.use(express.json()); 
-app.use(express.urlencoded({ extended: true })); 
-app.use(methodOverride('_method'))
+// 3. USO DE LAS RUTAS
+app.use('/', authRouter); // Rutas de /login y /logout
+app.use('/', mainRouter); // Resto de las rutas (home, noticias, servicios, etc.)
 
-//Montar el router para la ruta base (/)
-app.use("/", routerMain); 
+// --- GESTIÓN DE ERROR 404 (Siempre al final) ---
+app.use((req, res, next) => {
+    res.status(404).render('home'); // Redirige al home o una página 404 si la ruta no existe
+});
 
-// 4. Iniciar servidor
-
-
-
-// Usa la variable de entorno PORT, o 3000 como respaldo local.
+// --- INICIO DEL SERVIDOR ---
 const PORT = process.env.PORT || 3000;
-app.listen(PORT,() => console.log(`Server Ágora corriendo en el puerto ${PORT}`))
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+});
