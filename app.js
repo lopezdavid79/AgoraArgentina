@@ -3,6 +3,17 @@ const app = express();
 const path = require("path");
 
 const methodOverride =  require('method-override');
+const session = require('express-session'); 
+// Configuración de Sesiones
+app.use(session({
+    secret: 'CLAVE_SECRETA_LARGA_PARA_AGORA', // ¡Cambia esto por algo único y largo!
+    resave: false, // No forzar que la sesión se guarde en cada request
+    saveUninitialized: false, // No crear sesiones para usuarios que no han iniciado sesión
+    cookie: { 
+        secure: 'auto', // Auto: usa HTTPS si es necesario (mejor para producción)
+        maxAge: 1000 * 60 * 60 * 24 // Cookie dura 24 horas
+    }
+}));
 
 // 1. Cargar el enrutador principal
 const routerMain = require("./router/mainRouter"); 
