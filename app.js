@@ -21,6 +21,7 @@ app.use(methodOverride('_method'));                     // Soporte para PUT y DE
 
 // 2. CONFIGURACIÓN DE SESIONES (¡Debe ir antes de las rutas!)
 app.use(session({
+    
     secret: "AgoraArgentinaSecret2025", // Clave para firmar la cookie
     resave: false,                      // No guarda la sesión si no hay cambios
     saveUninitialized: false,           // No crea sesiones para usuarios no logueados
@@ -31,14 +32,19 @@ app.use(session({
 }));
 
 // --- MIDDLEWARE PARA PASAR DATOS DE SESIÓN A LAS VISTAS (Opcional pero útil) ---
-// Esto permite saber si el usuario está logueado en cualquier archivo .ejs (ej: para mostrar el botón Logout)
+// Middleware Global para pasar datos de sesión a las vistas
 app.use((req, res, next) => {
-    res.locals.isLoggedIn = req.session.isLoggedIn || false;
-    res.locals.user = req.session.user || null;
-    next();
-});
+    // Definimos isLogged por defecto en false
+    res.locals.isLogged = false;
 
-// 3. USO DE LAS RUTAS
+    // Si existe un usuario en sesión, cambiamos a true y pasamos sus datos
+    if (req.session && req.session.userLogged) {
+        res.locals.isLogged = true;
+        res.locals.user = req.session.userLogged; // Esto permite usar 'user.nombre' en el header si quieres
+    }
+    
+    next(); // Muy importante para que la web siga cargando
+});// 3. USO DE LAS RUTAS
 app.use('/', authRouter); // Rutas de /login y /logout
 app.use('/', mainRouter); // Resto de las rutas (home, noticias, servicios, etc.)
 

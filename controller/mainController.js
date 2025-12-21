@@ -1,109 +1,86 @@
-const path = require('path');
-const fs = require('fs');
-
-// Define el caracter BOM (Byte Order Mark) para limpieza de archivos de texto
-const BOM = '\ufeff'; 
-
-// =============================================================
-// FUNCIÓN AUXILIAR: Carga segura de JSON con limpieza de BOM
-// =============================================================
-const loadJSON = (filePath) => {
-    try {
-        // Lee el archivo de forma síncrona
-        const data = fs.readFileSync(filePath, 'utf-8');
-        
-        // Elimina el BOM si existe al inicio del archivo
-        const cleanData = data.startsWith(BOM) ? data.slice(1) : data;
-        
-        return JSON.parse(cleanData);
-    } catch (error) {
-        // Muestra el error en consola si falla la carga y devuelve un array vacío
-        console.error(`Error al cargar ${path.basename(filePath)}:`, error.message);
-        return []; 
-    }
-};
-
-// =============================================================
-// CARGA DE DATOS AL INICIO DE LA APLICACIÓN
-// =============================================================
-const allCursos = loadJSON(path.join(__dirname, '../data/cursos.json'));
-const allNoticias = loadJSON(path.join(__dirname, '../data/noticias.json'));
-
-// Preparación de datos de noticias (Ordenar y limitar para Home)
-const sortedNoticias = [...allNoticias].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-const homeNoticias = sortedNoticias.slice(0, 3);
-
-// =============================================================
-// FUNCIONES AUXILIARES DE BÚSQUEDA
-// =============================================================
-const getCursoBySlug = (slug) => allCursos.find(curso => curso.slug === slug);
-const getNoticiaBySlug = (slug) => allNoticias.find(noticia => noticia.slug === slug);
-
+const db = require('../config/firebase'); // Importa la conexión a Firestore
 
 const mainController = {
     // RUTAS ESTÁTICAS Y HOME
-    home: (req,res) => {
-        res.render('home',{
-            title:"Programa Ágora | Inicio",
-            noticias: homeNoticias // Pasa solo las 3 noticias más recientes
-        });
-    },    
-    quienesSomos: (req,res) => {
-        res.render('quienes-somos',{title:"Programa Ágora | Quiénes Somos"});
-    },    
-    servicios: (req,res) => {
-        res.render('servicios',{title:"Programa Ágora | Servicios"});
-    },
-    contacto: (req,res) => {
-        res.render('contacto',{title:"Programa Ágora | Contacto"});
-    },
-    
-    // RUTAS DE CAPACITACIONES
-    capacitaciones: (req,res) => {
-        res.render('capacitaciones',{
-            title:"Programa Ágora | Capacitaciones",
-            cursos: allCursos // Pasa el listado completo para la vista de capacitaciones
-        });
-    },
+    home: async (req, res) => {
+        try {
+            // Obtenemos solo las 3 noticias más recientes de Firestore
+            const snapshot = await db.collection('noticias')
+                .orderBy('fecha', 'desc')
+                .limit(3)
+                .get();
 
-    // RUTA DINÁMICA: Detalle de Curso (router.get('/cursos/:slug'))
-    cursoDetail: (req, res) => {
-        const cursoEncontrado = getCursoBySlug(req.params.slug);
-        
-        if (!cursoEncontrado) {
-            return res.status(404).send('Error 404: El curso solicitado no fue encontrado.');
+            const homeNoticias = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+            res.render('home', {
+                title: "Programa Ágora | Inicio",
+                noticias: homeNoticias
+            });
+        } catch (error) {
+            console.error("Error en Home:", error);
+            res.status(500).send("Error al cargar el inicio");
         }
+    },
 
-        res.render('cursos/detail', { 
-            title: `Capacitación: ${cursoEncontrado.titulo}`,
-            curso: cursoEncontrado
+    quienesSomos: (req, res) => {
+        res.render('quienes-somos', { title: "Programa Ágora | Quiénes Somos" });
+    },
+
+    servicios: (req, res) => {
+        res.render('servicios', { title: "Programa Ágora | Servicios" });
+    },
+
+    contacto: (req, res) => {
+        res.render('contacto', { title: "Programa Ágora | Contacto" });
+    },
+
+    // RUTAS DE CAPACITACIONES (Si también pasas cursos a Firebase, sigue el mismo patrón)
+    capacitaciones: (req, res) => {
+        // Por ahora mantengo allCursos si sigue siendo local, 
+        // pero lo ideal sería pasarlo a Firestore también.
+        res.render('capacitaciones', {
+            title: "Programa Ágora | Capacitaciones",
+            cursos: [] // Aquí iría tu lógica de cursos
         });
     },
 
-    // RUTAS DE NOTICIAS (NUEVAS)
+    // RUTAS DE NOTICIAS (MODIFICADAS PARA FIREBASE)
     
-    // Lista de Noticias (router.get('/noticias'))
-    noticias: (req, res) => {
-        // Asumiendo que existe una vista views/noticias.ejs (o views/noticias/list.ejs)
-        res.render('noticias', { 
-            title: "Archivo de Noticias",
-            // Pasa todas las noticias ordenadas por fecha
-            noticias: sortedNoticias 
-        });
+    // Lista de Noticias completa
+    noticias: async (req, res) => {
+        try {
+            const snapshot = await db.collection('noticias').orderBy('fecha', 'desc').get();
+            const noticiasFirebase = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+            res.render('noticias', {
+                title: "Archivo de Noticias",
+                noticias: noticiasFirebase
+            });
+        } catch (error) {
+            res.status(500).send("Error al cargar las noticias");
+        }
     },
 
-    // RUTA DINÁMICA: Detalle de Noticia (router.get('/noticias/:slug'))
-    noticiaDetail: (req, res) => {
-        const noticiaEncontrada = getNoticiaBySlug(req.params.slug);
-        
-        if (!noticiaEncontrada) {
-            return res.status(404).send('Error 404: Noticia no encontrada.');
-        }
+    // Detalle de Noticia por slug
+    noticiaDetail: async (req, res) => {
+        try {
+            const slug = req.params.slug;
+            // Buscamos en la colección el documento que coincida con el slug
+            const snapshot = await db.collection('noticias').where('slug', '==', slug).limit(1).get();
 
-        res.render('noticias/detail', { 
-            title: noticiaEncontrada.titulo,
-            noticia: noticiaEncontrada // Pasa los datos de la noticia individual
-        });
+            if (snapshot.empty) {
+                return res.status(404).send('Error 404: Noticia no encontrada.');
+            }
+
+            const noticiaEncontrada = snapshot.docs[0].data();
+
+            res.render('noticias/detail', {
+                title: noticiaEncontrada.titulo,
+                noticia: noticiaEncontrada
+            });
+        } catch (error) {
+            res.status(500).send("Error al cargar el detalle");
+        }
     }
 }
 

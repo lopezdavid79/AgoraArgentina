@@ -22,6 +22,10 @@ router.get('/cursos/:slug', mainController.cursoDetail);
 
 // Noticias (Vista pública)
 router.get('/noticias', mainController.noticias); 
+// Crear noticia
+// Nota: 'image' debe coincidir con el name del input file en tu formulario EJS
+router.get('/noticias/create',  newsController.create);
+
 router.get('/noticias/:slug', mainController.noticiaDetail);
 
 
@@ -32,9 +36,6 @@ router.get('/noticias/:slug', mainController.noticiaDetail);
 // Listado administrativo (donde ves la tabla para editar o borrar)
 router.get('/admin/noticias', authMiddleware, newsController.adminList);
 
-// Crear noticia
-// Nota: 'image' debe coincidir con el name del input file en tu formulario EJS
-router.get('/noticias/create', authMiddleware, newsController.create);
 router.post('/noticias/create', authMiddleware, uploadNews.single('image'), newsController.store);
 
 // Editar noticia

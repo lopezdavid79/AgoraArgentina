@@ -42,11 +42,14 @@
                         <li class="nav-item" role="none"><a class="nav-link text-dark" href="/capacitaciones" role="menuitem">Capacitaciones</a></li>
                         <li class="nav-item" role="none"><a class="nav-link text-dark" href="/noticias" role="menuitem">Noticias</a></li>
                         
-                        <li class="nav-item ms-lg-3" role="none">
-                            <a class="btn btn-primary-accent rounded-pill px-4 py-2" href="/contacto" role="button">
-                                Contacto
-                            </a>
-                        </li>
+                        
+        <% if (isLogged) { %>
+            <li><a href="/admin/noticias" style="color: #ff9800;">⚙️ Panel Admin</a></li>
+            <li><a href="/admin/logout">Cerrar Sesión</a></li>
+        <% } else { %>
+            <li><a href="/login">Acceso Admin</a></li>
+        <% } %>
+                    
                     </ul>
                 </div>
             </div>

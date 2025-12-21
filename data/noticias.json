@@ -5,7 +5,7 @@
         "titulo": "Ágora lanza el Taller de Empleabilidad 2025: Inscríbete ya",
         "descripcionCorta": "Abrimos las inscripciones para la próxima edición de nuestro programa de mentoría intensiva para la búsqueda de empleo.",
         "slug": "lanzamiento-taller-empleabilidad-2025",
-        "imagen": "/images/noticia-taller.jpg" 
+        "imagen": "/images/noticia-taller.jpg"
     },
     {
         "id": 2,
@@ -30,5 +30,12 @@
         "descripcionCorta": "Firma de acuerdo de colaboración para generar 20 nuevas vacantes en empresas socias de la Cámara Argentina de Comercio.",
         "slug": "convenio-asaerca-vacantes",
         "imagen": "/images/noticia-convenio.jpg"
+    },
+    {
+        "id": 5,
+        "title": "🚀 ¡Se abre la convocatoria al curso “Apps de Google”!",
+        "content": "A partir del 19 de marzo de 2026, te invitamos a participar de este curso especialmente pensado para personas con discapacidad visual que quieran potenciar sus habilidades digitales y mejorar sus oportunidades en el mercado laboral.\r\nAprendé a usar de forma eficiente una de las herramientas más demandadas por empresas y organizaciones, en un entorno accesible y adaptado a tus necesidades.\r\n📅 Inicio: 19 de marzo de 2026\r\n🎯 Cupo limitado",
+        "image": "noticia-1766061952286-.png",
+        "slug": "🚀-¡se-abre-la-convocatoria-al-curso-“apps-de-google”!"
     }
 ]
