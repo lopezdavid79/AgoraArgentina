@@ -1,0 +1,18 @@
+const express = require('express');
+const router = express.Router();
+const adminController = require('../controller/adminController');
+
+// Middleware para verificar sesión
+function isAdmin(req, res, next) {
+    if (req.session && req.session.user) { // Verifica la sesión corregida en app.js
+        return next();
+    }
+    res.redirect('/login');
+}
+
+router.get('/admin/dashboard', isAdmin, adminController.index);
+router.get('/admin/noticias/nuevo', isAdmin, adminController.create);
+router.post('/admin/noticias/nuevo', isAdmin, adminController.store);
+router.get('/admin/noticias/editar/:id', isAdmin, adminController.edit);
+router.put('/admin/noticias/editar/:id', isAdmin, adminController.update);
+module.exports = router;

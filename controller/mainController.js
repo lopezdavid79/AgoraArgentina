@@ -1,16 +1,27 @@
-const db = require('../config/firebase'); // Importa la conexión a Firestore
+const db = require('../config/firebase');
 
 const mainController = {
-    // RUTAS ESTÁTICAS Y HOME
+    // HOME: Muestra las últimas 3 noticias
     home: async (req, res) => {
         try {
-            // Obtenemos solo las 3 noticias más recientes de Firestore
             const snapshot = await db.collection('noticias')
                 .orderBy('fecha', 'desc')
                 .limit(3)
                 .get();
 
-            const homeNoticias = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            const homeNoticias = snapshot.docs.map(doc => {
+                const data = doc.data();
+                return {
+                    id: doc.id,
+                    ...data,
+                    // Formateo de fecha bonita: "22 de diciembre de 2024"
+                    fecha: data.fecha ? data.fecha.toDate().toLocaleDateString('es-AR', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                    }) : 'Fecha no disponible'
+                };
+            });
 
             res.render('home', {
                 title: "Programa Ágora | Inicio",
@@ -18,10 +29,76 @@ const mainController = {
             });
         } catch (error) {
             console.error("Error en Home:", error);
-            res.status(500).send("Error al cargar el inicio");
+            res.render('home', { title: "Inicio", noticias: [] });
         }
     },
 
+    // LISTADO DE TODAS LAS NOTICIAS
+    noticias: async (req, res) => {
+        try {
+            const snapshot = await db.collection('noticias')
+                .orderBy('fecha', 'desc')
+                .get();
+
+            const noticiasFirebase = snapshot.docs.map(doc => {
+                const data = doc.data();
+                return {
+                    id: doc.id,
+                    ...data,
+                    fecha: data.fecha ? data.fecha.toDate().toLocaleDateString('es-AR', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                    }) : 'Fecha no disponible'
+                };
+            });
+
+            res.render('noticias', {
+                title: "Archivo de Noticias",
+                noticias: noticiasFirebase
+            });
+        } catch (error) {
+            console.error("Error en página noticias:", error);
+            res.status(500).send("Error al cargar las noticias");
+        }
+    },
+
+    // DETALLE DE UNA NOTICIA
+    noticiaDetail: async (req, res) => {
+        try {
+            const slug = req.params.slug;
+            const snapshot = await db.collection('noticias')
+                .where('slug', '==', slug)
+                .limit(1)
+                .get();
+
+            if (snapshot.empty) {
+                return res.status(404).send('Noticia no encontrada');
+            }
+
+            const doc = snapshot.docs[0];
+            const data = doc.data();
+            const noticia = {
+                id: doc.id,
+                ...data,
+                fecha: data.fecha ? data.fecha.toDate().toLocaleDateString('es-AR', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                }) : 'Fecha no disponible'
+            };
+
+            res.render('noticias/detail', {
+                title: noticia.titulo,
+                noticia: noticia
+            });
+        } catch (error) {
+            console.error("Error en detalle:", error);
+            res.status(500).send("Error al cargar el detalle");
+        }
+    },
+
+    // RUTAS ESTÁTICAS (Asegúrate de que estos nombres coincidan con tu Router)
     quienesSomos: (req, res) => {
         res.render('quienes-somos', { title: "Programa Ágora | Quiénes Somos" });
     },
@@ -34,54 +111,19 @@ const mainController = {
         res.render('contacto', { title: "Programa Ágora | Contacto" });
     },
 
-    // RUTAS DE CAPACITACIONES (Si también pasas cursos a Firebase, sigue el mismo patrón)
     capacitaciones: (req, res) => {
-        // Por ahora mantengo allCursos si sigue siendo local, 
-        // pero lo ideal sería pasarlo a Firestore también.
         res.render('capacitaciones', {
             title: "Programa Ágora | Capacitaciones",
-            cursos: [] // Aquí iría tu lógica de cursos
+            cursos: [] // Aquí puedes luego agregar lógica de cursos en Firebase
         });
     },
 
-    // RUTAS DE NOTICIAS (MODIFICADAS PARA FIREBASE)
-    
-    // Lista de Noticias completa
-    noticias: async (req, res) => {
-        try {
-            const snapshot = await db.collection('noticias').orderBy('fecha', 'desc').get();
-            const noticiasFirebase = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-            res.render('noticias', {
-                title: "Archivo de Noticias",
-                noticias: noticiasFirebase
-            });
-        } catch (error) {
-            res.status(500).send("Error al cargar las noticias");
-        }
-    },
-
-    // Detalle de Noticia por slug
-    noticiaDetail: async (req, res) => {
-        try {
-            const slug = req.params.slug;
-            // Buscamos en la colección el documento que coincida con el slug
-            const snapshot = await db.collection('noticias').where('slug', '==', slug).limit(1).get();
-
-            if (snapshot.empty) {
-                return res.status(404).send('Error 404: Noticia no encontrada.');
-            }
-
-            const noticiaEncontrada = snapshot.docs[0].data();
-
-            res.render('noticias/detail', {
-                title: noticiaEncontrada.titulo,
-                noticia: noticiaEncontrada
-            });
-        } catch (error) {
-            res.status(500).send("Error al cargar el detalle");
-        }
+    cursoDetail: (req, res) => {
+        res.render('cursos/detail', { 
+            title: "Detalle de Capacitación",
+            curso: {} 
+        });
     }
-}
+};
 
 module.exports = mainController;

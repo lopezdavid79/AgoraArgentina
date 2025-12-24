@@ -1,68 +1,42 @@
+const db = require('../config/firebase');
 const bcrypt = require('bcryptjs');
-const User = require('../models/User'); 
 
 const authController = {
-    // 1. Muestra el formulario de login (GET /login)
+    // 1. Mostrar el formulario (GET /login)
     showLogin: (req, res) => {
-        res.render('admin/login', { errors: null }); 
+        res.render('admin/login', { title: "Login | Admin" });
+                    errores: null // <--- Agrega esto para que EJS no falle
     },
 
-    // 2. Procesa el formulario de login (POST /login)
-    login: (req, res) => {
+    // 2. Procesar el ingreso (POST /login)
+    login: async (req, res) => {
         const { username, password } = req.body;
-        const user = User.findByUsername(username); 
+        try {
+            const snapshot = await db.collection('usuarios')
+                                     .where('username', '==', username)
+                                     .limit(1)
+                                     .get();
 
-        // 2.1. Verificar si existe el usuario
-        if (!user) {
-            return res.render('admin/login', { errors: { global: 'Credenciales inválidas.' } });
-        }
+            if (snapshot.empty) return res.status(401).send("Usuario no encontrado");
 
-        // 2.2. Comparar la contraseña (hash)
-        const isPasswordValid = bcrypt.compareSync(password, user.password);
+            const user = snapshot.docs[0].data();
+            const validPassword = await bcrypt.compare(password, user.password);
 
-        if (isPasswordValid) {
-            // Éxito: Crear la sesión
-            req.session.isLoggedIn = true;
-            req.session.user = { id: user.id, username: user.username, rol: user.rol };
-            
-            // Redirigir a la interfaz de administración de noticias
-            return res.redirect('/admin/noticias/create'); 
-        } else {
-            // Fallo de autenticación
-            res.render('admin/login', { errors: { global: 'Credenciales inválidas.' } });
+            if (validPassword) {
+                req.session.user = { username: user.username, rol: user.rol };
+                res.redirect('/admin/dashboard');
+            } else {
+                res.status(401).send("Contraseña incorrecta");
+            }
+        } catch (error) {
+            res.status(500).send("Error en el servidor");
         }
     },
 
-    // 3. Cerrar la sesión (GET o POST /logout)
+    // 3. Cerrar sesión (GET /logout)
     logout: (req, res) => {
-        req.session.destroy(err => {
-            if (err) console.error(err);
-            res.redirect('/login');
-        });
-    }
-};
-    // A. Mostrar el Formulario (GET /noticias/create)
-    createNewsForm: (req, res) => {
-        res.render('noticias/create'); // Asumiendo que views/noticias/create.ejs existe
-    
-
-    // B. Guardar la Noticia (POST /noticias/create)
-    storeNews: (req, res) => {
-        // req.body contiene los campos de texto
-        // req.file contiene los datos de la imagen subida por Multer
-
-        const newNoticia = {
-            title: req.body.title,
-            content: req.body.content,
-            date: new Date().toLocaleDateString('es-AR'),
-            // Guarda la RUTA RELATIVA de la imagen para usarla en las vistas
-            image: req.file ? '/images/noticias/' + req.file.filename : '/images/default.jpg' 
-        };
-
-        News.save(newNoticia);
-
-        // Redirigir al listado de noticias o a la nueva noticia
-        res.redirect('/noticias');
+        req.session.destroy();
+        res.redirect('/login');
     }
 };
 

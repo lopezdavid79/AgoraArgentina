@@ -9,4 +9,4 @@ const hash = bcrypt.hashSync(miPassword, salt);
 
 console.log("--- COPIA EL SIGUIENTE TEXTO ---");
 console.log(hash);
-console.log("-------------------------------");
+console.log("");

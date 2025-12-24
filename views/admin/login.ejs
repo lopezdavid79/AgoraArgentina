@@ -5,11 +5,11 @@
         <div class="card p-4 shadow-lg" style="width: 100%; max-width: 400px;">
             <h2 class="text-center mb-4">Acceso de Administrador Ágora</h2>
 
-            <% if (errors && errors.global) { %>
-                <div class="alert alert-danger" role="alert">
-                    <%= errors.global %>
-                </div>
-            <% } %>
+            <% if (typeof errores !== 'undefined' && errores) { %>
+    <div class="alert alert-danger">
+        <%= errores %>
+    </div>
+<% } %>
 
             <form action="/login" method="POST">
                 <div class="mb-3">

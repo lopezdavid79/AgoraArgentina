@@ -1,11 +1,13 @@
 const express = require('express');
 const path = require('path');
 const methodOverride = require('method-override');
-const session = require('express-session'); // Requerir express-session
+const session = require('express-session');
 
 // 1. IMPORTAR LOS ROUTERS
 const mainRouter = require('./router/mainRouter');
-const authRouter = require('./router/authRouter'); // Importar el router de autenticación
+const authRouter = require('./router/authRouter');
+const adminRouter = require('./router/adminRouter');
+
 
 const app = express();
 
@@ -14,47 +16,51 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // --- MIDDLEWARES GLOBALES ---
-app.use(express.static(path.join(__dirname, 'public'))); // Carpeta pública
+app.use(express.static(path.join(__dirname, 'public'))); // Archivos estáticos (CSS, JS, Imágenes)
 app.use(express.urlencoded({ extended: false }));       // Capturar datos de formularios
 app.use(express.json());                                // Capturar datos JSON
-app.use(methodOverride('_method'));                     // Soporte para PUT y DELETE
+app.use(methodOverride('_method'));                     // Soporte para PUT y DELETE (formularios)
 
-// 2. CONFIGURACIÓN DE SESIONES (¡Debe ir antes de las rutas!)
+// 2. CONFIGURACIÓN DE SESIONES (Debe ir ANTES de las rutas)
 app.use(session({
-    
-    secret: "AgoraArgentinaSecret2025", // Clave para firmar la cookie
-    resave: false,                      // No guarda la sesión si no hay cambios
-    saveUninitialized: false,           // No crea sesiones para usuarios no logueados
+    secret: "Adm@gora$", 
+    resave: false,                      
+    saveUninitialized: false,           
     cookie: { 
-        secure: false,                  // Cambiar a true solo si usas HTTPS
+        secure: false,                  // Cambiar a true si usas HTTPS en el futuro
         maxAge: 1000 * 60 * 60 * 24     // La sesión dura 24 horas
     }
 }));
 
-// --- MIDDLEWARE PARA PASAR DATOS DE SESIÓN A LAS VISTAS (Opcional pero útil) ---
-// Middleware Global para pasar datos de sesión a las vistas
+// 3. MIDDLEWARE PARA PASAR DATOS DE SESIÓN A LAS VISTAS (Global)
 app.use((req, res, next) => {
-    // Definimos isLogged por defecto en false
+    // Definimos variables por defecto para que EJS no falle si no existen
     res.locals.isLogged = false;
+    res.locals.user = null;
 
-    // Si existe un usuario en sesión, cambiamos a true y pasamos sus datos
-    if (req.session && req.session.userLogged) {
+    // Si existe el usuario en la sesión, lo pasamos a res.locals
+        if (req.session && req.session.user) { 
         res.locals.isLogged = true;
-        res.locals.user = req.session.userLogged; // Esto permite usar 'user.nombre' en el header si quieres
+        res.locals.user = req.session.user;
     }
     
-    next(); // Muy importante para que la web siga cargando
-});// 3. USO DE LAS RUTAS
+    next(); // Permite que la ejecución continúe hacia las rutas
+});
+
+// 4. USO DE LAS RUTAS
 app.use('/', authRouter); // Rutas de /login y /logout
-app.use('/', mainRouter); // Resto de las rutas (home, noticias, servicios, etc.)
+app.use('/', mainRouter); // Rutas de noticias, servicios, home, etc.
+app.use('/', adminRouter); // Rutas de administrador
 
 // --- GESTIÓN DE ERROR 404 (Siempre al final) ---
 app.use((req, res, next) => {
-    res.status(404).render('home'); // Redirige al home o una página 404 si la ruta no existe
+        res.status(404).redirect('/'); 
 });
 
 // --- INICIO DEL SERVIDOR ---
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
+    console.log(`----------------------------------------------`);
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    console.log(`----------------------------------------------`);
 });

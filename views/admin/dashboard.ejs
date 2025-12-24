@@ -1,0 +1,34 @@
+<%- include('../partials/header') %>
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Gestión de Noticias</h1>
+        <a href="/admin/noticias/nuevo" class="btn btn-success">+ Nueva Noticia</a>
+    </div>
+
+    <table class="table table-hover shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>Título</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% noticias.forEach(noticia => { %>
+            <tr>
+                <td><%= noticia.titulo %></td>
+<td>
+    <%= noticia.fecha && noticia.fecha.toDate ? noticia.fecha.toDate().toLocaleDateString('es-AR') : noticia.fecha %>
+</td>
+                <td>
+                    <a href="/admin/noticias/editar/<%= noticia.id %>" class="btn btn-sm btn-warning">Editar</a>
+                    <form action="/admin/noticias/eliminar/<%= noticia.id %>?_method=DELETE" method="POST" class="d-inline">
+                        <button class="btn btn-sm btn-danger">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>
+<%- include('../partials/footer') %>
