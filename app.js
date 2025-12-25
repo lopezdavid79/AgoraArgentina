@@ -1,3 +1,4 @@
+require('dotenv').config(); // Esto permite que las variables se carguen localmente y en la nube
 const express = require('express');
 const path = require('path');
 const methodOverride = require('method-override');
@@ -58,9 +59,9 @@ app.use((req, res, next) => {
 });
 
 // --- INICIO DEL SERVIDOR ---
-const PORT = process.env.PORT || 3000;
+// app.js
+const PORT = process.env.PORT || 3000; // Render usará process.env.PORT automáticamente
+
 app.listen(PORT, () => {
-    console.log(`----------------------------------------------`);
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-    console.log(`----------------------------------------------`);
+    console.log(`Servidor iniciado en el puerto ${PORT}`);
 });

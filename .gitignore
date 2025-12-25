@@ -1,2 +1,4 @@
 serviceAccount.json
 .env
+hash.js
+*.log
