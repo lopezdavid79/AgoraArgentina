@@ -2,7 +2,7 @@
     {
         "id": 101,
         "titulo": "NVDA Básico (Navegación y Uso Inicial)",
-        "descripcionCorta": "Curso esencial para la introducción al lector de pantalla NVDA. Aprende a navegar por el escritorio, aplicaciones básicas y el uso fundamental del teclado.",
+        "descripcion": "Curso esencial para la introducción al lector de pantalla NVDA. Aprende a navegar por el escritorio, aplicaciones básicas y el uso fundamental del teclado.",
         "modalidad": "Online - Sincrónico",
         "duracion": "3 Semanas",
         "slug": "nvda-basico-uso-inicial",
@@ -43,8 +43,8 @@
     },
     {
         "id": 103,
-        "titulo": "Aplicaciones de Google con NVDA (Profundización)",
-        "descripcionCorta": "Domina el entorno completo de Google Workspace: Gmail, Drive, Documentos, Hojas de Cálculo y Calendario, garantizando una colaboración y productividad totalmente accesible con NVDA.",
+        "titulo": "Aplicaciones de Google con NVDA ",
+        "descripcion": "Domina el entorno completo de Google Workspace: Gmail, Drive, Documentos, Hojas de Cálculo y Calendario, garantizando una colaboración y productividad totalmente accesible con NVDA.",
         "modalidad": "Online - Sincrónico",
         "duracion": "6 Semanas (26 horas)",
         "slug": "apps-google-con-nvda-profundizacion",

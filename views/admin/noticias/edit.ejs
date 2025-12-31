@@ -1,5 +1,3 @@
-
-
 <main class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-9">
@@ -7,6 +5,7 @@
                 <div class="card-header bg-warning text-dark py-3">
                     <h2 class="h4 mb-0"><i class="fas fa-edit me-2"></i>Editar Noticia</h2>
                 </div>
+      
                 <div class="card-body p-4">
                     <form action="/admin/noticias/editar/<%= noticia.id %>?_method=PUT" method="POST">
                         
@@ -30,11 +29,15 @@
                         <div class="row align-items-center mb-3">
                             <div class="col-md-8">
                                 <label for="imagenUrl" class="form-label fw-bold">URL de la Imagen</label>
-                                <input type="url" class="form-control" id="imagenUrl" name="imagenUrl" value="<%= noticia.imagenUrl %>" required>
+                                <input type="url" class="form-control mb-2" id="imagenUrl" name="imagenUrl" value="<%= noticia.imagenUrl %>" required>
+                                
+                                <label for="alt" class="form-label fw-bold text-primary">Texto Alternativo (Accesibilidad)</label>
+                                <input type="text" class="form-control" id="alt" name="alt" value="<%= noticia.alt || '' %>" placeholder="Describe la imagen para lectores de pantalla" required>
+                                <div class="form-text">Ej: "Persona utilizando una computadora con el lector de pantalla NVDA".</div>
                             </div>
                             <div class="col-md-4 text-center">
-                                <div id="preview-container" class="mt-2 border rounded d-flex align-items-center justify-content-center bg-light" style="height: 100px; overflow: hidden;">
-                                    <img id="img-preview" src="<%= noticia.imagenUrl %>" alt="Previsualización" class="img-fluid">
+                                <div id="preview-container" class="mt-2 border rounded d-flex align-items-center justify-content-center bg-light" style="height: 120px; overflow: hidden;">
+                                    <img id="img-preview" src="<%= noticia.imagenUrl %>" alt="<%= noticia.alt %>" class="img-fluid">
                                 </div>
                             </div>
                         </div>
@@ -58,11 +61,16 @@
 </main>
 
 <script>
-    // Script simple para actualizar la preview si cambian la URL
+    // Script para actualizar la preview y el atributo alt en tiempo real
     const imagenInput = document.getElementById('imagenUrl');
+    const altInput = document.getElementById('alt');
     const imgPreview = document.getElementById('img-preview');
+
     imagenInput.addEventListener('input', () => {
         imgPreview.src = imagenInput.value;
     });
-</script>
 
+    altInput.addEventListener('input', () => {
+        imgPreview.alt = altInput.value;
+    });
+</script>

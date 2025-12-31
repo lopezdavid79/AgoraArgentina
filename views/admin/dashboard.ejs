@@ -1,34 +1,134 @@
 <%- include('../partials/header') %>
+
 <div class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Gestión de Noticias</h1>
-        <a href="/admin/noticias/nuevo" class="btn btn-success">+ Nueva Noticia</a>
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-5 fw-bold text-primary">Panel de Administración</h1>
+            <p class="lead text-muted">Gestiona el contenido de Agora Argentina desde un solo lugar.</p>
+            <div class="d-flex justify-content-center gap-3 mt-4">
+                <a href="/admin/noticias/nuevo" class="btn btn-primary btn-lg px-4 shadow-sm">
+                    <i class="fas fa-plus-circle me-2"></i>Nueva Noticia
+                </a>
+                <a href="/admin/cursos/nuevo" class="btn btn-success btn-lg px-4 shadow-sm">
+                    <i class="fas fa-graduation-cap me-2"></i>Nuevo Curso
+                </a>
+            </div>
+        </div>
     </div>
 
-    <table class="table table-hover shadow-sm">
-        <thead class="table-dark">
-            <tr>
-                <th>Título</th>
-                <th>Fecha</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% noticias.forEach(noticia => { %>
-            <tr>
-                <td><%= noticia.titulo %></td>
-<td>
-    <%= noticia.fecha && noticia.fecha.toDate ? noticia.fecha.toDate().toLocaleDateString('es-AR') : noticia.fecha %>
-</td>
-                <td>
-                    <a href="/admin/noticias/editar/<%= noticia.id %>" class="btn btn-sm btn-warning">Editar</a>
-                    <form action="/admin/noticias/eliminar/<%= noticia.id %>?_method=DELETE" method="POST" class="d-inline">
-                        <button class="btn btn-sm btn-danger">Eliminar</button>
-                    </form>
-                </td>
-            </tr>
-            <% }) %>
-        </tbody>
-    </table>
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white py-3 border-0 d-flex align-items-center">
+                    <i class="fas fa-newspaper text-primary fs-4 me-2"></i>
+                    <h3 class="h5 mb-0 fw-bold">Gestión de Noticias</h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-4">Título</th>
+                                    <th>Fecha</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% noticias.forEach(noticia => { %>
+                                <tr>
+                                    <td class="ps-4 fw-medium"><%= noticia.titulo %></td>
+                                    <td class="text-secondary small">
+                                        <%= noticia.fecha && noticia.fecha.toDate ? noticia.fecha.toDate().toLocaleDateString('es-AR') : 'Reciente' %>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group shadow-sm">
+                                            <a href="/admin/noticias/editar/<%= noticia.id %>" class="btn btn-sm btn-outline-primary" aria-label="editar">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form action="/admin/noticias/eliminar/<%= noticia.id %>?_method=DELETE" method="POST" onsubmit="return confirm('¿Eliminar noticia?')">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" aria-label="Eliminar">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white py-3 border-0 d-flex align-items-center">
+                    <i class="fas fa-book-reader text-success fs-4 me-2"></i>
+                    <h3 class="h5 mb-0 fw-bold">Gestión de Cursos</h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-4">Nombre del Curso</th>
+                                    <th>Modalidad</th>
+                                    <th>Duración</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% cursos.forEach(curso => { %>
+                                <tr>
+                                    <td class="ps-4">
+                                        <span class="fw-bold text-dark"><%= curso.titulo %></span>
+                                    </td>
+                                    <td><span class="badge rounded-pill bg-info text-dark"><%= curso.modalidad %></span></td>
+                                    <td class="text-muted small"><%= curso.duracion %></td>
+                                    <td class="text-center">
+                                        <div class="btn-group shadow-sm">
+                                            <a href="/admin/cursos/editar/<%= curso.id %>" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-edit" aria-label="editar"></i>
+                                            </a>
+                                            <form action="/admin/cursos/eliminar/<%= curso.id %>?_method=DELETE" method="POST" onsubmit="return confirm('¿Eliminar curso?')">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" aria-label="eliminar">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<style>
+    /* Estilos personalizados para un acabado premium */
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+    .card {
+        transition: transform 0.2s;
+    }
+    .table-hover tbody tr:hover {
+        background-color: rgba(13, 110, 253, 0.02);
+    }
+    .btn-group .btn {
+        padding: 0.4rem 0.8rem;
+    }
+    .rounded-4 {
+        border-radius: 1rem !important;
+    }
+</style>
+
 <%- include('../partials/footer') %>

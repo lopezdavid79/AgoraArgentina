@@ -110,19 +110,66 @@ const mainController = {
     contacto: (req, res) => {
         res.render('contacto', { title: "Programa Ágora | Contacto" });
     },
+    // CAPACITACIONES: Listado completo de cursos
+    capacitaciones: async (req, res) => {
+        try {
+            // Obtenemos todos los cursos de la colección 'cursos'
+            const snapshot = await db.collection('cursos').get();
 
-    capacitaciones: (req, res) => {
-        res.render('capacitaciones', {
-            title: "Programa Ágora | Capacitaciones",
-            cursos: [] // Aquí puedes luego agregar lógica de cursos en Firebase
-        });
+            const cursosFirebase = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+
+            res.render('cursos', {
+                title: "Capacitaciones Disponibles",
+                cursos: cursosFirebase
+            });
+        } catch (error) {
+            console.error("Error en página cursos:", error);
+            res.status(500).send("Error al cargar los cursos");
+        }
     },
 
-    cursoDetail: (req, res) => {
-        res.render('cursos/detail', { 
-            title: "Detalle de Capacitación",
-            curso: {} 
-        });
+    // DETALLE DE UN CURSO (Corregido para usar Firebase)
+    cursoDetail: async (req, res) => {
+        try {
+            const slug = req.params.slug;
+            // Buscamos el documento donde el campo slug coincida
+            const snapshot = await db.collection('cursos')
+                .where('slug', '==', slug)
+                .limit(1)
+                .get();
+
+            if (snapshot.empty) {
+                return res.status(404).send('Curso no encontrado');
+            }
+
+            const doc = snapshot.docs[0];
+            const curso = {
+                id: doc.id,
+                ...doc.data()
+            };
+
+            res.render('cursos/detail', { 
+                title: curso.titulo,
+                curso: curso 
+            });
+        } catch (error) {
+            console.error("Error en detalle de curso:", error);
+            res.status(500).send("Error al cargar el detalle del curso");
+        }
+    },
+
+    // RUTAS ESTÁTICAS
+    quienesSomos: (req, res) => {
+        res.render('quienes-somos', { title: "Programa Ágora | Quiénes Somos" });
+    },
+    servicios: (req, res) => {
+        res.render('servicios', { title: "Programa Ágora | Servicios" });
+    },
+    contacto: (req, res) => {
+        res.render('contacto', { title: "Programa Ágora | Contacto" });
     }
 };
 

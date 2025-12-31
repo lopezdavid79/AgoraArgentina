@@ -1,81 +1,91 @@
-<!DOCTYPE html>
-<html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chaltu Bags    </title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
-    rel="stylesheet" />
-    <script src="https://kit.fontawesome.com/997049d577.js" crossorigin="anonymous"></script>
-    
-    <link rel="stylesheet" href="../css/styles.css">
+<main class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white py-3">
+                    <h2 class="h4 mb-0"><i class="fas fa-graduation-cap me-2"></i>Crear Nuevo Curso</h2>
+                </div>
+                <div class="card-body p-4">
+                    <form action="/admin/cursos/guardar" method="POST">
+                        
+                        <div class="row">
+                            <div class="col-md-7 mb-3">
+                                <label for="titulo" class="form-label fw-bold">Título del Curso</label>
+                                <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Ej: NVDA Básico" required>
+                            </div>
 
+                            <div class="col-md-5 mb-3">
+                                <label for="slug" class="form-label fw-bold">Slug (URL automática)</label>
+                                <input type="text" class="form-control bg-light" id="slug" name="slug" readonly required>
+                            </div>
+                        </div>
 
-</head>
-    
-<body>
-    <header class = "top-header"> 
-        <a href="#main">ir al contenido principal </a>
-        <div class = "logoybarra">
-        <img src="../images/logo_chaltu_bags.jpg" class = "logo"  alt="logo">
-        <h1>
-            CHALTU Bags
-        </h1>
-        
-        <div class="form" action="#" method="GET" role="search">
-            <div class="input">Buscar mochilas, Riñoneras y más<i class="fa fa-search"></i></div>
-          </i>
-        </div>
-        <h2>
-            <div class="compraencuotas"> <i class="fa-solid fa-hand-holding-dollar"></i> Comprá en cuotas y con tarjeta de crédito de todos los bancos</div>
-        </h2>
-        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="modalidad" class="form-label fw-bold">Modalidad</label>
+                                <input type="text" class="form-control" id="modalidad" name="modalidad" placeholder="Ej: Online - Sincrónico">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="duracion" class="form-label fw-bold">Duración</label>
+                                <input type="text" class="form-control" id="duracion" name="duracion" placeholder="Ej: 6 Semanas">
+                            </div>
+                        </div>
 
-           
+                        <div class="mb-3">
+                            <label for="descripcionCorta" class="form-label fw-bold">Descripción Corta (Resumen para tarjetas)</label>
+                            <textarea class="form-control" id="descripcionCorta" name="descripcionCorta" rows="2" required></textarea>
+                        </div>
 
-    <%- include("../partial/navbar") -%>
-</header>
-<main>
-<div class="tituloform">
-<h2 class="titulo"> Completa tus datos</h2> 
-</div>
-    <form class="listadoform"  action="/create" method="POST">
-                
-        <div>
-            <label for="articulo">Articulo</label>
-            <input type="text" class="ingresodato" name="articulo" id="articulo" placeholder="Ingresar articulo" required autofocus>
-        </div>
-        <div>
-            <label for="modelo">Modelo</label>
-            <input type="text" class="ingresodato" name="modelo" id="modelo" placeholder="Ingresar modelo" required>
-        </div>
-<div>
-            <label for="descripcion">Descripción</label>
-            <input type="text" class="ingresodato" name="descripcion" id="descripcion" placeholder="Ingresar descripción">
-        </div>
+                        <div class="mb-3">
+                            <label for="objetivoGeneral" class="form-label fw-bold">Objetivo General</label>
+                            <textarea class="form-control" id="objetivoGeneral" name="objetivoGeneral" rows="3"></textarea>
+                        </div>
 
-        <div>
-            <label for="precio">Precio</label>
-            <input type="number"  class="ingresodato" name="precio" placeholder="Ingresar precio">
-        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="objetivos" class="form-label fw-bold">Objetivos Específicos (Uno por línea)</label>
+                                <textarea class="form-control" id="objetivos" name="objetivos" rows="6" placeholder="Aprender a instalar NVDA&#10;Configurar voces..."></textarea>
+                                <small class="text-muted">Presiona Enter para separar cada objetivo.</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="temario" class="form-label fw-bold">Temario / Unidades (Uno por línea)</label>
+                                <textarea class="form-control" id="temario" name="temario" rows="6" placeholder="Unidad 1: Introducción&#10;Unidad 2: Navegación..."></textarea>
+                                <small class="text-muted">Presiona Enter para separar cada unidad.</small>
+                            </div>
+                        </div>
 
-        <div>
-            <label for="imagen">Imagen</label>
-            <input type="file" name="imagen" id="imagen" value="src=../img/placa.jpg" placeholder="Ingresar imagen">
+                        <div class="mb-4">
+                            <label for="imagen" class="form-label fw-bold">URL de la Imagen</label>
+                            <input type="text" class="form-control" id="imagen" name="imagen" placeholder="/images/curso-ejemplo.png">
+                        </div>
+
+                        <div class="text-center border-top pt-4">
+                            <a href="/admin/cursos" class="btn btn-outline-secondary px-4 me-2">Cancelar</a>
+                            <button type="submit" class="btn btn-primary px-5 fw-bold">
+                                <i class="fas fa-save me-2"></i>Guardar Curso
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        
-        <div class = "botonenviar">
-            <input type="submit" value="Guardar Producto">
-        </div>
-        
-    </form>
-    <div class="boton">
-        <a href="/products/list">Volver</a>
     </div>
-	
 </main>
-	<%- include('../partial/footer') -%>
-</body>
-</html>
+
+<script>
+    // Generador de Slug (Misma lógica que usaste en noticias)
+    const tituloInput = document.getElementById('titulo');
+    const slugInput = document.getElementById('slug');
+
+    tituloInput.addEventListener('input', () => {
+        const slug = tituloInput.value
+            .toLowerCase()
+            .trim()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-z0-9 -]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-');
+        slugInput.value = slug;
+    });
+</script>

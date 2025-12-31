@@ -83,14 +83,14 @@
                         <div class="card h-100 card-minimal overflow-hidden">
                             
                             <% if (noticia.imagenUrl) { %>
-                                <img src="<%= noticia.imagen %>" class="card-img-top" alt="Imagen representativa de la noticia: <%= noticia.titulo %>" style="height: 180px; object-fit: cover;">
+                                <img src="<%= noticia.imagen %>" class="card-img-top" alt="<%= noticia.alt %>" style="height: 180px; object-fit: cover;">
                             <% } %>
 
                             <div class="card-body d-flex flex-column">
                                 <h3 class="h5 card-title fw-bold text-dark"><%= noticia.titulo %></h3>
                                 <p class="card-text text-secondary small flex-grow-1"><%= noticia.copete%></p>
                                 
-                                <span class="badge text-bg-light text-muted fw-normal mt-2">Publicado: <%= new Date(noticia.fecha).toLocaleDateString('es-AR') %></span>
+                                <span class="badge text-bg-light text-muted fw-normal mt-2">Publicado: <%= noticia.fecha %> </span>
                             </div>
                             
                             <div class="card-footer bg-white border-0">
