@@ -89,7 +89,6 @@ update: async (req, res) => {
             res.status(500).send("Error al cargar cursos");
         }
     },
-
     // Formulario de nuevo curso
     createCurso: (req, res) => {
         res.render('admin/cursos/create', { title: "Nuevo Curso" });
@@ -98,30 +97,43 @@ update: async (req, res) => {
     // Guardar curso en Firebase
     storeCurso: async (req, res) => {
         try {
-            const { titulo, descripcion, modalidad, duracion, slug, objetivoGeneral, objetivos, temario, imagen ,alt} = req.body;
+            // Extraemos descripcionCorta del formulario y la asignamos a la variable descripcion
+            const { 
+                titulo, 
+                descripcionCorta, 
+                modalidad, 
+                duracion, 
+                slug, 
+                objetivoGeneral, 
+                objetivos, 
+                temario, 
+                imagen, 
+                alt, 
+                urlInscrip 
+            } = req.body;
             
-            // Convertimos el texto del textarea en un Array (separado por saltos de línea)
             const objetivosArray = objetivos ? objetivos.split('\n').map(i => i.trim()).filter(i => i !== "") : [];
             const temarioArray = temario ? temario.split('\n').map(i => i.trim()).filter(i => i !== "") : [];
 
-            // Usamos el slug como ID del documento para rutas limpias
+            // Se guarda en la base de datos usando la clave 'descripcion'
             await db.collection('cursos').doc(slug).set({
                 titulo,
-                descripcion,
+                descripcion: descripcionCorta, // Mapeo de nombre del form a nombre de DB
                 modalidad,
                 duracion,
                 slug,
                 objetivoGeneral,
-                objetivos: objetivosArray, // Se guarda como array en Firestore
-                temario: temarioArray,     // Se guarda como array en Firestore
+                objetivos: objetivosArray, 
+                temario: temarioArray,    
                 imagen: imagen || "/images/default-curso.png",
-                alt: alt,
+                alt: alt || "",
+                urlInscrip: urlInscrip || "", 
                 fechaCreacion: new Date()
             });
             
             res.redirect('/admin/cursos');
         } catch (error) {
-            console.error(error);
+            console.error("Error al guardar curso:", error);
             res.status(500).send("Error al guardar el curso");
         }
     },
@@ -133,32 +145,45 @@ update: async (req, res) => {
             if (!doc.exists) return res.status(404).send("Curso no encontrado");
             
             const curso = doc.data();
-            // Convertimos los arrays a texto para que el admin pueda editarlos fácilmente en un textarea
+            
             const datosParaForm = {
                 ...curso,
                 id: doc.id,
+                // Aseguramos que el formulario de edición reciba 'descripcionCorta' desde 'descripcion' de la DB
+                descripcionCorta: curso.descripcion, 
                 objetivosText: curso.objetivos ? curso.objetivos.join('\n') : "",
                 temarioText: curso.temario ? curso.temario.join('\n') : ""
             };
 
             res.render('admin/cursos/edit', { title: "Editar Curso", curso: datosParaForm });
         } catch (error) {
+            console.error("Error al cargar curso:", error);
             res.status(500).send("Error al cargar el curso");
         }
     },
-    // 2. Procesar la actualización (PUT/POST)
-    // ==========================================
+
+    // Procesar la actualización
     updateCurso: async (req, res) => {
         try {
-            const { titulo, descripcion, modalidad, duracion, objetivoGeneral, objetivos, temario, imagen ,alt} = req.body;
+            const { 
+                titulo, 
+                descripcionCorta, 
+                modalidad, 
+                duracion, 
+                objetivoGeneral, 
+                objetivos, 
+                temario, 
+                imagen, 
+                alt, 
+                urlInscrip 
+            } = req.body;
             
-            // Procesamos los textareas para volver a convertirlos en Arrays de Firebase
             const objetivosArray = objetivos ? objetivos.split('\n').map(i => i.trim()).filter(i => i !== "") : [];
             const temarioArray = temario ? temario.split('\n').map(i => i.trim()).filter(i => i !== "") : [];
 
             await db.collection('cursos').doc(req.params.id).update({
                 titulo,
-                descripcion,
+                descripcion: descripcionCorta, // Mantenemos el nombre de la DB
                 modalidad,
                 duracion,
                 objetivoGeneral,
@@ -166,6 +191,7 @@ update: async (req, res) => {
                 temario: temarioArray,
                 imagen,
                 alt,
+                urlInscrip,
                 fechaActualizacion: new Date()
             });
 
@@ -176,18 +202,16 @@ update: async (req, res) => {
         }
     },
 
-    // Eliminar curso
     deleteCurso: async (req, res) => {
         try {
             await db.collection('cursos').doc(req.params.id).delete();
             res.redirect('/admin/cursos');
         } catch (error) {
+            console.error("Error al eliminar curso:", error);
             res.status(500).send("Error al eliminar");
         }
     }
-
-
-
 };
 
 module.exports = adminController;
+    

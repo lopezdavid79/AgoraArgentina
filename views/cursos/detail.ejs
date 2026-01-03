@@ -70,7 +70,7 @@
                 <h3 class="h2 mb-4 fw-bolder text-dark">¿Te interesa este curso?</h3>
                 <p class="lead mb-4">¡Inscríbete ahora para asegurar tu cupo y dar el siguiente paso!</p>
                 
-                <a href="/contacto?asunto=Inscripcion%20a%20<%= encodeURIComponent(curso.titulo) %>" 
+                <a href="<%= curso.urlInscrip %>" 
                    class="btn btn-primary-accent btn-lg fw-bold rounded-pill px-5 py-3 shadow-lg" 
                    role="button">
                     <i class="bi bi-arrow-right-circle-fill me-2"></i> Inscribirse a <%= curso.titulo %>
