@@ -1,3 +1,4 @@
+/cypress
 serviceAccount.json
 .env
 hash.js

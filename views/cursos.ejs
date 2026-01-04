@@ -24,12 +24,12 @@
                     <div class="col">
                         <article class="card h-100 card-minimal overflow-hidden shadow-sm">
                             <% if (curso.imagen) { %>
-                                <img src="<%= curso.imagen %>" class="card-img-top" alt="Imagen del curso: <%= curso.titulo %>">
+                                <img src="<%= curso.imagen %>" class="card-img-top" alt="<%= curso.alt%>">
                             <% } %>
 
                             <div class="card-body d-flex flex-column">
                                 <h3 class="card-title text-primary fw-bold"><%= curso.titulo %></h3>
-                                <p class="card-text text-secondary flex-grow-1"><%= curso.descripcionCorta %></p>
+                                <p class="card-text text-secondary flex-grow-1"><%= curso.descripcion%></p>
                                 
                                 <div class="mt-3">
                                     <span class="badge text-bg-info me-2">Modalidad: <%= curso.modalidad %></span>

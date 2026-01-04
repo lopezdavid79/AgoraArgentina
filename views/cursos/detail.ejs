@@ -24,7 +24,7 @@
             
             <% if (curso.imagen) { %>
                 <img src="<%= curso.imagen %>" class="img-fluid rounded-3 mb-5 shadow-sm" 
-                     alt="Imagen descriptiva para el curso <%= curso.titulo %>" 
+                     alt="<%= curso.alt %>" 
                      style="max-height: 400px; width: 100%; object-fit: cover;">
             <% } %>
 
@@ -72,7 +72,7 @@
                 
                 <a href="<%= curso.urlInscrip %>" 
                    class="btn btn-primary-accent btn-lg fw-bold rounded-pill px-5 py-3 shadow-lg" 
-                   role="button">
+                   role="button" target="_blank">
                     <i class="bi bi-arrow-right-circle-fill me-2"></i> Inscribirse a <%= curso.titulo %>
                 </a>
             </div>

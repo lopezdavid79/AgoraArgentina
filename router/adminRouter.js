@@ -19,5 +19,5 @@ router.put('/admin/noticias/editar/:id', isAdmin, adminController.update);
 router.get('/admin/cursos/nuevo', isAdmin, adminController.createCurso);
 router.post('/admin/cursos/nuevo', isAdmin, adminController.storeCurso);
 router.get('/admin/cursos/editar/:id', isAdmin, adminController.editCurso);
-router.put('/admin/cursos/editar/:id', isAdmin, adminController.update);
+router.put('/admin/cursos/editar/:id', isAdmin, adminController.updateCurso);
 module.exports = router;

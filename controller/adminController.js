@@ -96,48 +96,58 @@ update: async (req, res) => {
 
     // Guardar curso en Firebase
     storeCurso: async (req, res) => {
-        try {
-            // Extraemos descripcionCorta del formulario y la asignamos a la variable descripcion
-            const { 
-                titulo, 
-                descripcionCorta, 
-                modalidad, 
-                duracion, 
-                slug, 
-                objetivoGeneral, 
-                objetivos, 
-                temario, 
-                imagen, 
-                alt, 
-                urlInscrip 
-            } = req.body;
-            
-            const objetivosArray = objetivos ? objetivos.split('\n').map(i => i.trim()).filter(i => i !== "") : [];
-            const temarioArray = temario ? temario.split('\n').map(i => i.trim()).filter(i => i !== "") : [];
+    try {
+        console.log("DATOS RECIBIDOS DEL FORMULARIO:", req.body); // Verifica esto en tu terminal
 
-            // Se guarda en la base de datos usando la clave 'descripcion'
-            await db.collection('cursos').doc(slug).set({
-                titulo,
-                descripcion: descripcionCorta, // Mapeo de nombre del form a nombre de DB
-                modalidad,
-                duracion,
-                slug,
-                objetivoGeneral,
-                objetivos: objetivosArray, 
-                temario: temarioArray,    
-                imagen: imagen || "/images/default-curso.png",
-                alt: alt || "",
-                urlInscrip: urlInscrip || "", 
-                fechaCreacion: new Date()
-            });
-            
-            res.redirect('/admin/cursos');
-        } catch (error) {
-            console.error("Error al guardar curso:", error);
-            res.status(500).send("Error al guardar el curso");
+        const { 
+            titulo, 
+            descripcionCorta, 
+            modalidad, 
+            duracion, 
+            slug, 
+            objetivoGeneral, 
+            objetivos, 
+            temario, 
+            imagen, 
+            alt, 
+            urlInscrip 
+        } = req.body;
+
+        // VALIDACIÓN DE EMERGENCIA
+        if (!slug || slug.trim() === "") {
+            console.error("ERROR: El slug está vacío. No se puede crear el documento.");
+            return res.status(400).send("El campo Slug es obligatorio.");
         }
-    },
 
+        const objetivosArray = objetivos ? objetivos.split('\n').map(i => i.trim()).filter(i => i !== "") : [];
+        const temarioArray = temario ? temario.split('\n').map(i => i.trim()).filter(i => i !== "") : [];
+
+        // GUARDADO EN FIREBASE
+        await db.collection('cursos').doc(slug).set({
+            titulo,
+            descripcion: descripcionCorta, // Se guarda como 'descripcion' para que dashboard.ejs lo lea
+            modalidad,
+            duracion,
+            slug,
+            objetivoGeneral,
+            objetivos: objetivosArray,
+            temario: temarioArray,
+            imagen: imagen || "",
+            alt: alt || "",
+            urlInscrip: urlInscrip || "",
+            fechaCreacion: new Date()
+        });
+
+        console.log("¡CURSO GUARDADO EXITOSAMENTE EN FIREBASE!");
+        
+        // REDIRECCIÓN CORRECTA AL DASHBOARD
+        res.redirect('/admin/dashboard'); 
+
+    } catch (error) {
+        console.error("ERROR DETALLADO DE FIREBASE:", error);
+        res.status(500).send("Error interno del servidor al guardar en Firebase: " + error.message);
+    }
+},
     // Formulario de edición de curso
     editCurso: async (req, res) => {
         try {
