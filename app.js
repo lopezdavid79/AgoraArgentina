@@ -61,7 +61,8 @@ app.use((req, res, next) => {
 // --- INICIO DEL SERVIDOR ---
 // app.js
 const PORT = process.env.PORT || 3000; // Render usará process.env.PORT automáticamente
-
+/*
 app.listen(PORT, () => {
     console.log(`Servidor iniciado en el puerto ${PORT}`);
 });
+*/
