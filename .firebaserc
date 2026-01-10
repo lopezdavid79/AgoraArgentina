@@ -1,8 +1,5 @@
 {
   "projects": {
-    "agoraargentina": "agoraargentina-e0643",
     "default": "agoraargentina-e0643"
-  },
-  "targets": {},
-  "etags": {}
+  }
 }
